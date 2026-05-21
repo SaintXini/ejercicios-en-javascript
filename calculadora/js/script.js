@@ -15,16 +15,20 @@ window.onload = function() {
 			} else if (n=="=") {
 				calcular();
 			} else if(signos.indexOf(n)>-1){
-				validaSigno(n);
+				validarSigno(n);
 			} else {
 				regresar(n);
 			}
 		}
 	}
 }
+
+
 /*****************
 F U N C I O N E S
 ******************/
+
+
 function numeros(e){
 	let tecla = e.keyCode;
 	let teclado = String.fromCharCode(tecla);
@@ -41,18 +45,59 @@ function numeros(e){
 		return false;
 	}
 }
+
 function borrar(){
-	console.log("Borrar");
+	document.forma.valor.value = "";
 }
+
 function borrarCaracter(){
-	console.log("Borrar caracter");
+	let anterior = document.forma.valor.value;
+    let nuevo = anterior.substring(0,anterior.length-1)
+    document.getElementById("valor").value = nuevo;
 }
+
 function calcular(){
-	console.log("Calcular");
+	let resultado = eval(document.forma.valor.value);
+	if(resultado == "Infinity") {
+		document.forma.valor = "No podemos dividir entre cero"
+	} else {
+		document.forma.valor.value = resultado;
+	}
 }
-function validaSigno(n){
-	console.log("validaSigno");
+
+function validarSigno(n){
+	let anterior = document.forma.valor.value;
+	if(anterior != ""){
+		document.getElementById("valor").value = anterior + n;
+		cadena = document.getElementById("valor").value;
+		
+		let record = 0;
+		let igual = 1;
+
+		for(var a = 0; a < cadena.length; a++) {
+			if(cadena.charAt(a)=="+" || cadena.charAt(a)=="-" || cadena.charAt(a)=="*" || cadena.charAt(a)=="." || cadena.charAt(a)=="/") {
+				igual++;
+			} else {
+				if (igual > record) {
+					record = igual;
+				} else {
+					igual = 1;
+				}
+			}
+			if (igual > record) {
+				record = igual;
+			}
+			if(record > 2){
+				let numero = cadena.substring(0,cadena.length-1);
+				document.getElementById("valor").value = numero;
+				record=0; igual = 1;
+			}
+		}
+	}
 }
+
 function regresar(n){
-	console.log("regresar número");
+	let anterior = document.forma.valor.value;
+    let nuevo = anterior+n;
+    document.getElementById("valor").value = nuevo;
 }
